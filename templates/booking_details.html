@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'cus.css') }}">
+    <title>All Bookings Details</title>
+    <!-- Add your styling and scripts here if needed -->
+</head>
+
+<body>
+    <h1>All Bookings Details</h1>
+    <table>
+        <tr>
+            <th>Payment ID</th>
+            <th>Reservation ID</th>
+            <th>Customer ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Address</th>
+            <th>Room Number</th>
+            <th>Check-in Date</th>
+            <th>Checkout Date</th>
+            <th>Total Amount</th>
+        </tr>
+        {% for booking in bookings_data %}
+        <tr>
+            <td>{{ booking[0]}}</td>
+            <td>{{ booking[1] }}</td>
+            <td>{{ booking[2] }}</td>
+            <td>{{ booking[3] }}</td>
+            <td>{{ booking[4] }}</td>
+            <td>{{ booking[5] }}</td>
+            <td>{{ booking[6] }}</td>
+            <td>{{ booking[7] }}</td>
+            <td>{{ booking[8] }}</td>
+            <td>{{ booking[9] }}</td>
+            <td>{{ booking[10] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

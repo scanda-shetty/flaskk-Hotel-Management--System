@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Customer Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'cus.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://kit.fontawesome.com/e126e5d0d0.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script>
+        $(document).ready(function () {
+            $(".sortable").click(function () {
+                var column = $(this).data("column");
+                var order = $(this).data("order");
+                var newOrder = (order === "asc") ? "desc" : "asc";
+                var url = "{{ url_for('customer_info') }}?selected_column=" + column + "&order=" + newOrder;
+                window.location.href = url;
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Customer Information</h1>
+    <form method="POST" action="/customer_info">
+        <label for="fname">First Name:</label>
+        <input type="text" name="fname" id="fname" value="{{ fname }}" placeholder="...">
+        <label for="lname">Last Name:</label>
+        <input type="text" name="lname" id="lname" value="{{ lname }}">
+        <button type="submit">Apply Filters</button>
+        <div class="dropdown">
+            More Filters
+            <!-- Dropdown content -->
+            <div class="dropdown-content">
+                <a href="#" onclick="selectFilterOption('Highest Spenders');">Highest Spenders</a>
+                <a href="#" onclick="selectFilterOption('Most Reservations');">Most Reservations</a>
+                <!-- Add more options as needed -->
+            </div>
+        </div>
+        <input type="hidden" name="filter_option" id="filter_option" value="">
+    </form>
+
+    <table>
+        <tr>
+            <th class="sortable" data-column="Customer_ID" data-order="{{ order }}">Customer ID <i
+                    class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="Email" data-order="{{ order }}">Email <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="First_Name" data-order="{{ order }}">First Name <i
+                    class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="Last_Name" data-order="{{ order }}">Last Name <i class="fas fa-sort"></i>
+            </th>
+            <th class="sortable" data-column="Age" data-order="{{ order }}">Age <i class="fas fa-sort"></i></th>
+            <th class="sortable" data-column="Address" data-order="{{ order }}">
+                {% if filter_option == 'Highest Spenders' %}
+                Total Spendings
+                {% elif filter_option == 'Most Reservations' %}
+                Total Bookings
+                {% else %}
+                Address
+                {% endif %}
+                <i class="fas fa-sort"></i>
+            </th>
+        </tr>
+        {% for customer in customer_data %}
+        <tr>
+            <td>
+                <a href="{{ url_for('booking_details', cus_id=customer[0]) }}" class="link">{{ customer[0] }}</a>
+            </td>
+            <td>
+                <a href="{{ url_for('booking_details', cus_id=customer[0]) }}" class="link">{{ customer[1] }}</a>
+            </td>
+            <td>
+                <a href="{{ url_for('booking_details', cus_id=customer[0]) }}" class="link">{{ customer[2] }}</a>
+            </td>
+            <td>
+                <a href="{{ url_for('booking_details', cus_id=customer[0]) }}" class="link">{{ customer[3] }}</a>
+            </td>
+            <td>{{ customer[4] }}</td>
+            <td>{{ customer[5] }}</td>
+            <!-- Add more <td> elements for additional attributes -->
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/dashboard">Back to Dashboard</a>
+    <script>
+        function selectFilterOption(option) {
+            document.getElementById('filter_option').value = option;
+            document.querySelector('form').submit();
+        }
+    </script>
+</body>
+</html>
